@@ -45,4 +45,33 @@ class Solution {
 			cache[idx1][idx2] = 0;
 		return ans;
 	}
+		public static boolean wildcardBUp(String str, String str1) {
+		boolean[][] cache = new boolean[str.length() + 1][str1.length() + 1];
+		for (int i = 0; i < cache.length; i++) {
+			cache[i][str1.length()] = false;
+		}
+		cache[str.length()][str1.length()] = true;
+		int i;
+		int flag = 1;
+		for (i = str1.length() - 1; i >= 0; i--) {
+			if (str1.charAt(i) == '*' && flag == 1)
+				cache[str.length()][i] = true;
+			else {
+				flag = 0;
+				cache[str.length()][i] = false;
+			}
+		}
+		for( i =str.length()-1;i>=0;i--) {
+			for(int j=str1.length()-1;j>=0;j--) {
+				if(str.charAt(i)==str1.charAt(j) || str1.charAt(j)=='?') {
+					cache[i][j]=cache[i+1][j+1];
+				}else if(str1.charAt(j)=='*') {
+					cache[i][j] = cache[i+1][j]||cache[i][j+1];
+				}else{
+					cache[i][j]=false;
+				}
+			}
+		}
+		return cache[0][0];
+	}
 }
